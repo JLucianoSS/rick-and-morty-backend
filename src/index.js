@@ -1,41 +1,20 @@
-const express = require("express");
-const router = require("./routes")
- 
-const server = express();
+const server = require("./app")
+const { conn } = require('./db/connection');
+
+
 const PORT = 3001;
 
 
-//MIDDLEWARES
-server.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header(
-       'Access-Control-Allow-Headers',
-       'Origin, X-Requested-With, Content-Type, Accept'
-    );
-    res.header(
-       'Access-Control-Allow-Methods',
-       'GET, POST, OPTIONS, PUT, DELETE'
-    );
-    next();
-  });
-
-server.use(express.json());
-server.use("/rickandmorty", router) // --> localhost:3001/rickandmorty/login
-
-
-
-
 //ESCUCHANDO PETICIONES GRACIAS AL SERVICIO LEVANTADO
-server.listen(PORT,() => {
-    console.log("Server levantado en el puerto " + PORT);
-    /*Recuerda que el cannot GET/ se muestra si la ruta no esta definida en tu servidor */
+
+conn.sync({force:true}).then(() => {
+    console.log('Database Connected');
+    server.listen(PORT,() => {
+        console.log("Server levantado en el puerto " + PORT);
+        /*Recuerda que el cannot GET/ se muestra si la ruta no esta definida en tu servidor */
+    });
 })
-
-
-
-
-
+.catch(error => console.log(error.message));
 
 
 /*WEB SERVER BÁSICO */
