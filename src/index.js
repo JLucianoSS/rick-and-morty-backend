@@ -7,7 +7,7 @@ const PORT = 3001;
 
 //ESCUCHANDO PETICIONES GRACIAS AL SERVICIO LEVANTADO
 
-conn.sync({force:true}).then(() => {
+conn.sync({alter:false}).then(() => {
     console.log('Database Connected');
     server.listen(PORT,() => {
         console.log("Server levantado en el puerto " + PORT);

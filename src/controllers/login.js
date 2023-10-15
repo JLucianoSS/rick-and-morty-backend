@@ -1,13 +1,23 @@
-const users =  require("../utils/users");
+const { User } = require("../db/connection");
 
-const login = (req,res) =>{
-    const { email, password} = req.query;
+const login = async (req, res) => {
+    try {
+        const {email,password} = req.query;
+        if (!email || !password) res.staus(400).json({ message: "Faltan datos" });
+        const user = await User.findOne({
+            where:{
+                email
+            }
+        });
+        if(!user) return res.status(404).send({message:"Usuario Incorrecto "});
+        if(user.password !== password) return res.status(403).send({message:"Contraseña incorrecta"});
+        console.log("Acceso autorizado");
+        
+        res.send({access:true});
 
-    //verifica si hay algun  usuario que conincida con el email y password
-    const user = users.some( user => user.email === email && user.password ===password)
-    
-    // comprueba la respuesta y da el acceso #ojo user es un booleano
-    user ? res.json({access:true}) : res.json({access:false}) // creo que ya devlueve starus 200
+    } catch (error) {
+        res.status(500).json({msg: 'Internal server error', err: error.message});
+    }
 }
 
 module.exports = login;

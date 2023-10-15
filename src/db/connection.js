@@ -33,7 +33,7 @@ Favorite.belongsToMany(User, { through: "user_favorite" });
 /**ESTO CREA UNA TABLA INTERMEDIA */
 
 module.exports = {
-   // User,
-   // Favorite,
+   User,
+   Favorite,
    conn: sequelize,
 };
